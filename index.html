@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice Fishing Live</title>
+    
+    <link rel="preload" href="fonts/PantonNarrowDemo-Black.otf" as="font" type="font/opentype" crossorigin>
+    <link rel="preload" href="fonts/Etude Noire Medium.ttf" as="font" type="font/truetype" crossorigin>
+    <link rel="preload" href="images/promo.mp4" as="video" type="video/mp4">
+    <link rel="preload" href="images/video-poster.jpg" as="image">
+
+    <style>
+        /* 1. Подключение шрифтов */
+        @font-face {
+            font-family: 'PantonNarrowDemo';
+            src: url('fonts/PantonNarrowDemo-Black.otf') format('opentype');
+            font-weight: 900;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Etude Noire';
+            src: url('fonts/Etude Noire Medium.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        /* 2. Глобальные стили и сброс */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Etude Noire', sans-serif;
+            background-color: #2c3e50;
+            background-image: url('images/РыбФон.png'), linear-gradient(to bottom, #34495e 0%, #2c3e50 100%);
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: cover;
+            background-attachment: fixed;
+            color: #e0e0e0;
+            text-align: center;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* 3. Общий контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+        /* 4. Шапка (Header) */
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 30;
+        }
+        .logo {
+            width: 285px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-family: 'PantonNarrowDemo', sans-serif;
+            font-size: 4.2rem;
+            text-transform: uppercase;
+            color: #000000;
+            /* ИЗМЕНЕНИЕ: Синее свечение за надписью */
+            text-shadow: 0 0 15px rgba(0, 190, 255, 0.7), 0 1px 3px rgba(108, 108, 108, 0.5); 
+            margin-bottom: 25px;
+        }
+        .cta-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            font-family: 'Etude Noire', sans-serif;
+            font-weight: bold;
+            text-decoration: none;
+            color: #ffffff;
+            background: linear-gradient(90deg, #00b4ff, #0073ff);
+            padding: 17px 60px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            box-shadow: 0 0 15px rgba(0, 190, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 190, 255, 0.7);
+        }
+        .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            color: #0077cc;
+        }
+        /* ИЗМЕНЕНО: стили для новых иконок */
+        .web-icon::before { content: '\f0ac'; font-family: 'Font Awesome 5 Free'; font-weight: 900; } /* Web icon */
+        .telegram-icon::before { content: '\f2c6'; font-family: 'Font Awesome 5 Brands'; font-weight: 400; } /* Telegram icon */
+        
+        .vpn-note {
+            font-family: 'Etude Noire', sans-serif;
+            font-size: 1.2rem;
+            color: #000000;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 73%;
+        }
+        .vpn-button {
+            display: inline-block;
+            background-color: #ff8c00;
+            color: #ffffff;
+            padding: 8px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-family: 'Etude Noire', sans-serif;
+            font-size: 0.9rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            margin-top: 5px;
+            
+        }
+        .vpn-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 5. Секция с видео и большим айсбергом */
+        .video-section {
+            margin-top: 60px;
+            position: relative;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .video-placeholder {
+            width: 90%;
+            max-width: 640px;
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 60px rgba(0, 190, 255, 0.8), 0 15px 50px rgba(0, 0, 0, 0.7);
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            margin-bottom: -320px; 
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        /* 6. Большой айсберг */
+        .iceberg-large-img {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 850px;
+            pointer-events: none;
+            display: block;
+        }
+        
+        /* 7. Инфо-секция (Об игре и Плюсы) */
+        .info-section {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px;
+            position: relative;
+            z-index: 3;
+            margin-top: 20px; 
+            flex-wrap: wrap;
+        }
+        
+        /* --- СТИЛИ ДЛЯ POPUP --- */
+        .popup {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .popup.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .popup-content {
+            background: #2c3e50;
+            border: 1px solid #00b4ff;
+            border-radius: 20px;
+            padding: 40px 30px 30px 30px;
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 10px 40px rgba(0, 190, 255, 0.4);
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .popup.active .popup-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .popup-content h3 {
+            font-family: 'PantonNarrowDemo', sans-serif;
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+        .popup-content p {
+            font-family: 'Etude Noire', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            margin-bottom: 25px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.2s ease;
+        }
+        .popup-close:hover {
+            transform: scale(1.1) rotate(90deg);
+            color: #ff8c00;
+        }
+        /* --- КОНЕЦ СТИЛЕЙ POPUP --- */
+
+        .info-column {
+            flex: 1;
+            max-width: 420px;
+            min-width: 280px;
+            margin-bottom: 40px;
+        }
+        .info-column h2 {
+            font-family: 'PantonNarrowDemo', sans-serif;
+            font-size: 5rem;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+        }
+        
+        .info-column p, .info-column li {
+            font-family: 'Etude Noire', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+        .info-column ul { list-style: none; padding: 0; }
+        
+        /* 8. Кнопки внизу с айсбергами */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-bottom {
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            padding: 15px 40px;
+            border-radius: 50px;
+            border: none;
+            color: white;
+            font-family: 'Etude Noire', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            text-decoration: none;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(0, 190, 255, 0.5);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .btn-bottom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0, 190, 255, 0.7);
+        }
+        
+        /* Отдельный стиль ТОЛЬКО для оранжевой кнопки #playBtn */
+        a#playBtn.btn-bottom {
+            background: linear-gradient(135deg, #ff8c00, #ff6b00);
+            box-shadow: 0 8px 24px rgba(255, 140, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+        a#playBtn.btn-bottom:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 14px 32px rgba(255, 140, 0, 0.7);
+        }
+        @keyframes pulse {
+            0%,100% {opacity: 1; transform: scale(1);}
+            50% {opacity: 0.9; transform: scale(1.03);}
+        }
+
+        .iceberg-small { /* Левый айсберг */
+            position: relative;
+            z-index: 1;
+            width: 300px;
+            pointer-events: none;
+            margin-top: -100px;
+        }
+        .iceberg-small-right { /* Правый айсберг */
+            position: relative;
+            z-index: 1;
+            width: 300px;
+            pointer-events: none;
+            margin-top: -100px;
+        }
+        
+        /* 9. Подвал (Footer) */
+        .footer {
+            padding: 40px 20px 20px 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+        .footer p {
+            font-family: 'Etude Noire', sans-serif;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+            line-height: 1.5;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .footer p:first-child { margin-bottom: 10px; }
+
+        /* 10. Адаптивность (Media Queries) */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .video-placeholder { margin-bottom: -250px; } 
+            .info-section { margin-top: 20px; gap: 50px; } 
+            .info-column { width: 100%; max-width: 100%; }
+            .info-column h2 { font-size: 3rem; }
+            .iceberg-small, .iceberg-small-right {
+                width: 270px;
+                margin-top: -90px;
+            }
+            .play-btn-wrapper {
+                margin-top: -180px;
+            }
+        }
+        @media (max-width: 480px) {
+            .cta-buttons { flex-direction: column; width: 100%; }
+            .btn { width: 100%; justify-content: center; }
+            .video-section { margin-top: 20px; }
+            .video-placeholder { margin-bottom: -200px; } 
+            .info-section { margin-top: 20px; }
+            .info-column h2 { font-size: 2.5rem; }
+            .vpn-button { padding: 6px 20px; font-size: 0.8rem; }
+            .iceberg-small, .iceberg-small-right {
+                width: 250px;
+                margin-top: -90px;
+            }
+            .play-btn-wrapper {
+                margin-top: -140px;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        
+        <header class="header">
+            <img src="images/ЛогоРыб.png" alt="Ice Fishing Live Logo" class="logo">
+            <h1>САМАЯ ПРИБЫЛЬНАЯ РЫБАЛКА</h1>
+            
+            <div class="cta-buttons">
+                <a href="https://lbgame777.xyz/0zpJHH" target="_blank" class="btn btn-play">
+                    <span class="icon web-icon"></span>
+                    играть
+                </a>
+                <a href="https://t.me/LuckyBearPlayBot" target="_blank" class="btn btn-telegram">
+                    <span class="icon telegram-icon"></span>
+                    играть
+                </a>
+            </div>
+            
+            <div class="vpn-note">
+                рекомендуется VPN для игры
+                <a href="https://t.me/hitvpnbot?start=1468854637420476" class="vpn-button">VPN</a>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="video-section">
+                
+                <video id="promoVideo" class="video-placeholder" preload="auto" poster="images/video-poster.jpg" playsinline>
+                    <source src="images/promo.mp4" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+                
+                <img src="images/АйсбергБольшой.png" alt="Айсберг" class="iceberg-large-img">
+            </section>
+
+            
+            <div class="play-btn-wrapper" style="position: relative; z-index: 25; margin-top: -240px; display: flex; justify-content: center;">
+                 <a href="https://lbgame777.xyz/0zpJHH" class="btn-bottom" id="playBtn">Попробовать</a>
+            </div>
+
+            <section class="info-section">
+                
+                <div class="info-column about">
+                    <h2>ОБ ИГРЕ</h2>
+                    <p>ICE FISHING LIVE - захватывающая игра где тебе предстоит рыбачить, а каждая рыба будет умножать твой приз на разные множители.</p>
+                    <p>Испытай свою удачу уже сейчас, вылови рыбу своей мечты в этой увлекательной игре!</p>
+                    
+                    <div class="btn-container">
+                        <a href="https://lbgame777.xyz/0zpJHH" class="btn btn-bottom">испытать удачу!</a>
+                        <img src="images/АйсбергМеньше.png" alt="" class="iceberg-small">
+                    </div>
+                </div>
+                
+                <div class="info-column features">
+                    <h2>ПЛЮСЫ</h2>
+                    <ul>
+                        <li>Играй где угодно</li>
+                        <li>Увлекательный геймплэй</li>
+                        <li>Большие бонусы новым игрокам</li>
+                        <li>Свежая игра</li>
+                    </ul>
+                    <div class="btn-container">
+                        <a href="https://lbgame777.xyz/0zpJHH" class="btn-bottom">Попробовать сейчас</a>
+                        <img src="images/АйсбергМеньше.png" alt="" class="iceberg-small-right">
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Играйте ответственно. Только для лиц старше 18 лет.</p>
+            <p>&copy; 2025 Ice Fishing Live. Все права защищены.</p>
+        </footer>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <div class="popup-close" id="popupClose">&times;</div>
+            <h3>Вы могли выиграть 7 500 ₽!</h3>
+            <p>Попробуй прямо сейчас - удача явно на твоей стороне.</p>
+            <a href="https://lbgame777.xyz/0zpJHH" class="btn btn-bottom">Играть сейчас</a>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('promoVideo');
+        const playBtn = document.getElementById('playBtn');
+        const popup = document.getElementById('popup');
+        const popupClose = document.getElementById('popupClose');
+
+        let popupShown = false;
+
+        function playVideo() {
+            if (video.paused) {
+                video.muted = false; 
+                video.play().catch(() => {
+                    video.muted = true;
+                    video.play();
+                });
+
+                if (!popupShown) {
+                    setTimeout(() => {
+                        popup.classList.add('active');
+                        popupShown = true; 
+                    }, 32000); // 32 секунды
+                }
+            }
+        }
+
+        playBtn.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            if (navigator.vibrate) navigator.vibrate(100);
+            playVideo();
+        });
+
+        video.addEventListener('click', () => {
+            if (video.paused) {
+                playVideo();
+            } else {
+                video.pause(); 
+            }
+        });
+
+        popupClose.addEventListener('click', () => {
+            popup.classList.remove('active');
+        });
+    </script>
+
+</body>
+</html>
